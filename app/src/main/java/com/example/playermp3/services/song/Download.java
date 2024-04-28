@@ -49,6 +49,7 @@ public class Download extends AsyncTask<String, Void, Void> {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
+                        System.out.println("Tải file " + strings[1]);
                         Toast.makeText(MainActivity.context, "Tải file " + strings[1] +" thành công!", Toast.LENGTH_SHORT).show();
                     }
                 });

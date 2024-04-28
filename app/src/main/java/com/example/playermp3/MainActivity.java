@@ -11,15 +11,19 @@ import android.text.TextWatcher;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.playermp3.services.song.Listed;
 import com.example.playermp3.ui.SongAdapter;
 
 public class MainActivity extends AppCompatActivity {
     public static Context context;
+    public static Button btPlay;
+    public static Button btDowndload;
     public static RecyclerView recyclerView;
     public static SongAdapter songAdapter;
     EditText search_input;
+    public static TextView nowSong;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,8 +34,11 @@ public class MainActivity extends AppCompatActivity {
     }
     private void addView() {
         context = this;
+        btPlay = findViewById(R.id.btn_play);
+        btDowndload = findViewById(R.id.btn_download);
         recyclerView = findViewById(R.id.recycle_view);
         search_input = findViewById(R.id.search_input);
+        nowSong = findViewById(R.id.nowSong);
         search_input.post(new Runnable() {
             @Override
             public void run() {

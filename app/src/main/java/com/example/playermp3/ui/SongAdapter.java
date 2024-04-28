@@ -1,7 +1,11 @@
 package com.example.playermp3.ui;
 
+import static com.example.playermp3.MainActivity.recyclerView;
+
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +33,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     private List<Song> allSongs = null; // Danh sách tất cả bài hát (dữ liệu gốc)
     private List<Song> songList = null; // Danh sách các bài hát được hiển thị
     public static boolean isReady = false;
-
+    public void updateAllPlayButtons() {
+        System.out.println(getItemCount() + " Item count là");
+        for (int i = 0; i < getItemCount(); i++) {
+            SongViewHolder holder = (SongViewHolder) recyclerView.findViewHolderForAdapterPosition(i);
+            if (holder != null) {
+                holder.btnPlay.setText("Phát");
+            }
+        }
+    }
     public SongAdapter(List<Song> allSongs) {
         this.allSongs = allSongs;
         this.songList = new ArrayList<>(allSongs); // Khởi tạo danh sách hiển thị
@@ -54,6 +66,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             // Duyệt danh sách và xử lý các tệp mp3
             if (files != null) {
                 for (File file : files) {
+                    System.out.println("Đường dẫn file " + file.getName().toString());
                     // Truy cập file ở đây: file.getPath(), file.getName(), v.v.
                     System.out.println("Đường dẫn file: " + file.getName().toString());
                 }
@@ -91,7 +104,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SongViewHolder holder, @SuppressLint("RecyclerView") int position) {
         Song song = songList.get(position);
         holder.tvName.setText(song.getName());
         holder.tvUrl.setText(song.getCode());
@@ -102,8 +115,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
                 .into(holder.imgThumbnail);
 
         holder.btnPlay.setOnClickListener(view -> {
-            Play.stop(); // Dừng nhạc cũ trước khi phát
-            Play.play(songList.get(position).getUrl());  // Phát bài hát mới
+            if(Play.isPlay && position == Play.position) {
+                Play.stop(); // Pause
+                holder.btnPlay.setText("Phát");
+                updateAllPlayButtons();
+            } else {
+                Play.stop(); // Dừng nhạc cũ trước khi phát
+                Play.play(songList.get(position).getUrl(), songList.get(position).getName());  // Phát bài hát mới
+                holder.btnPlay.setText("Dừng");
+            }
+            Play.position = position;
         });
 
         holder.btnDownload.setOnClickListener(view -> {

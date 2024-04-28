@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:layout_marginRight="5dp"
-            android:text="Mở"
+            android:text="Phát"
             />
         <Button
             android:background="#C113B9"
