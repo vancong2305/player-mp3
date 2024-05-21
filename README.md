@@ -1,4 +1,4 @@
-# PlayerMp3
+# player-mp3
 
 ## Features
 ### Basic Functions
